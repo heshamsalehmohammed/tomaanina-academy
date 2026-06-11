@@ -80,6 +80,10 @@ export function RegistrationForm() {
   });
 
   const hasMemorization = watch("hasQuranMemorization");
+  const studentGender = watch("studentGender");
+  const requestedProgram = watch("requestedProgram");
+  const classType = watch("classType");
+  const wantsTrialLesson = watch("wantsTrialLesson");
 
   return (
     <form onSubmit={onSubmit} className="space-y-8">
@@ -94,7 +98,7 @@ export function RegistrationForm() {
         <CardHeader>
           <CardTitle>معلومات الطالب</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-6 sm:grid-cols-2">
           <Field label="اسم الطالب" error={errors.studentName?.message} required>
             <Input {...register("studentName")} placeholder="أدخل اسم الطالب" />
           </Field>
@@ -107,6 +111,7 @@ export function RegistrationForm() {
           </Field>
           <Field label="النوع" error={errors.studentGender?.message} required>
             <Select
+              value={studentGender || null}
               onValueChange={(v) => handleSelectChange(setValue, "studentGender", v)}
             >
               <SelectTrigger>
@@ -134,8 +139,9 @@ export function RegistrationForm() {
             required
           >
             <Select
+              value={hasMemorization || null}
               onValueChange={(v) =>
-                setValue("hasQuranMemorization", v as "true" | "false")
+                handleSelectChange(setValue, "hasQuranMemorization", v)
               }
             >
               <SelectTrigger>
@@ -176,7 +182,7 @@ export function RegistrationForm() {
         <CardHeader>
           <CardTitle>معلومات ولي الأمر / التواصل</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-6 sm:grid-cols-2">
           <Field
             label="اسم ولي الأمر"
             error={errors.parentName?.message}
@@ -215,13 +221,15 @@ export function RegistrationForm() {
         <CardHeader>
           <CardTitle>معلومات البرنامج</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-6 sm:grid-cols-2">
           <Field
             label="البرنامج المطلوب"
+            className="sm:col-span-2"
             error={errors.requestedProgram?.message}
             required
           >
             <Select
+              value={requestedProgram || null}
               onValueChange={(v) =>
                 handleSelectChange(setValue, "requestedProgram", v)
               }
@@ -240,6 +248,7 @@ export function RegistrationForm() {
           </Field>
           <Field label="نوع الحصة" error={errors.classType?.message} required>
             <Select
+              value={classType || null}
               onValueChange={(v) => handleSelectChange(setValue, "classType", v)}
             >
               <SelectTrigger>
@@ -264,6 +273,7 @@ export function RegistrationForm() {
             required
           >
             <Select
+              value={wantsTrialLesson || null}
               onValueChange={(v) =>
                 handleSelectChange(setValue, "wantsTrialLesson", v)
               }
@@ -332,12 +342,14 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <Label className="mb-2 block">
+      <Label className="mb-2.5 block text-sm font-semibold text-foreground/90">
         {label}
-        {required && <span className="text-destructive mr-1">*</span>}
+        {required && <span className="text-destructive ms-1">*</span>}
       </Label>
-      {children}
-      {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
+      <div className="w-full">{children}</div>
+      {error && (
+        <p className="mt-2 text-sm leading-relaxed text-destructive">{error}</p>
+      )}
     </div>
   );
 }

@@ -31,7 +31,9 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <RegistrationForm />
+        <div className="rounded-2xl border border-border/40 bg-card/30 p-4 sm:p-6 lg:p-8">
+          <RegistrationForm />
+        </div>
       </div>
     </div>
   );

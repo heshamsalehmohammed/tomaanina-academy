@@ -103,6 +103,17 @@ body {
   @apply px-4 py-20 sm:px-6 lg:px-8 lg:py-28;
 }
 
+/* Registration form field polish */
+[data-slot="input"],
+[data-slot="textarea"],
+[data-slot="select-trigger"] {
+  @apply bg-card/60;
+}
+
+[data-slot="select-content"] {
+  @apply backdrop-blur-sm;
+}
+
 .admin-light {
   --background: #f8fafc;
   --foreground: #0f172a;
