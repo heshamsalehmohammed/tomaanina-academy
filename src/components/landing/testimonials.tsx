@@ -1,4 +1,5 @@
 import { Quote } from "lucide-react";
+import { AnimatedCard } from "@/components/landing/animated-card";
 import { TESTIMONIALS } from "@/lib/constants";
 
 export function Testimonials() {
@@ -13,9 +14,10 @@ export function Testimonials() {
         </div>
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
-          {TESTIMONIALS.map((testimonial) => (
-            <div
+          {TESTIMONIALS.map((testimonial, index) => (
+            <AnimatedCard
               key={testimonial.name}
+              index={index}
               className="glass-card rounded-2xl p-6"
             >
               <Quote className="size-8 text-accent/60" />
@@ -28,7 +30,7 @@ export function Testimonials() {
                   {testimonial.role}
                 </div>
               </div>
-            </div>
+            </AnimatedCard>
           ))}
         </div>
       </div>

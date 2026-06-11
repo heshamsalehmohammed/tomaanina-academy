@@ -114,6 +114,45 @@ body {
   @apply backdrop-blur-sm;
 }
 
+/* Landing page card animations */
+.landing-card {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+  transition-delay: var(--card-delay, 0ms);
+}
+
+.landing-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.landing-card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(13, 148, 136, 0.12);
+}
+
+.landing-card-hover.landing-card-visible:hover {
+  transform: translateY(-6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .landing-card-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
 .admin-light {
   --background: #f8fafc;
   --foreground: #0f172a;

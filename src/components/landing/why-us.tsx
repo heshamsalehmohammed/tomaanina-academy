@@ -7,6 +7,7 @@ import {
   Users,
   Video,
 } from "lucide-react";
+import { AnimatedCard } from "@/components/landing/animated-card";
 import { WHY_CHOOSE_US } from "@/lib/constants";
 
 const iconMap = {
@@ -31,12 +32,13 @@ export function WhyUs() {
         </div>
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {WHY_CHOOSE_US.map((item) => {
+          {WHY_CHOOSE_US.map((item, index) => {
             const Icon = iconMap[item.icon as keyof typeof iconMap] ?? Users;
             return (
-              <div
+              <AnimatedCard
                 key={item.title}
-                className="rounded-2xl border border-border/50 bg-card/50 p-6 transition hover:border-primary/30"
+                index={index}
+                className="rounded-2xl border border-border/50 bg-card/50 p-6 hover:border-primary/30"
               >
                 <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
                   <Icon className="size-5" />
@@ -45,7 +47,7 @@ export function WhyUs() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   {item.description}
                 </p>
-              </div>
+              </AnimatedCard>
             );
           })}
         </div>

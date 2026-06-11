@@ -1,3 +1,4 @@
+import { AnimatedCard } from "@/components/landing/animated-card";
 import { HOW_IT_WORKS } from "@/lib/constants";
 
 export function HowItWorks() {
@@ -12,8 +13,12 @@ export function HowItWorks() {
         </div>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {HOW_IT_WORKS.map((step) => (
-            <div key={step.step} className="relative text-center">
+          {HOW_IT_WORKS.map((step, index) => (
+            <AnimatedCard
+              key={step.step}
+              index={index}
+              className="relative text-center"
+            >
               <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-emerald-600 text-xl font-bold text-white shadow-lg shadow-primary/25">
                 {step.step}
               </div>
@@ -21,7 +26,7 @@ export function HowItWorks() {
               <p className="mt-2 text-sm text-muted-foreground">
                 {step.description}
               </p>
-            </div>
+            </AnimatedCard>
           ))}
         </div>
       </div>

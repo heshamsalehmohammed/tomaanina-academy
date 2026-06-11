@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { ArrowLeft, Sparkles, Shield, Users } from "lucide-react";
+import { AnimatedCard } from "@/components/landing/animated-card";
 import { buttonVariants } from "@/components/ui/button";
 import { APP_TAGLINE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
+const heroCards = [
+  { icon: Shield, label: "بيئة تعليمية آمنة" },
+  { icon: Users, label: "معلمون متخصصون" },
+  { icon: Sparkles, label: "متابعة تعليمية منظمة" },
+] as const;
 
 export function Hero() {
   return (
@@ -45,18 +52,15 @@ export function Hero() {
         </div>
 
         <div className="mt-16 grid w-full max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
-          {[
-            { icon: Shield, label: "بيئة تعليمية آمنة" },
-            { icon: Users, label: "معلمون متخصصون" },
-            { icon: Sparkles, label: "متابعة تعليمية منظمة" },
-          ].map((item) => (
-            <div
+          {heroCards.map((item, index) => (
+            <AnimatedCard
               key={item.label}
+              index={index}
               className="glass-card flex items-center justify-center gap-3 rounded-2xl px-4 py-4"
             >
               <item.icon className="size-5 text-accent" />
               <span className="text-sm font-medium">{item.label}</span>
-            </div>
+            </AnimatedCard>
           ))}
         </div>
       </div>

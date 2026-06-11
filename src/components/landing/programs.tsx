@@ -7,6 +7,7 @@ import {
   PenLine,
   Sparkles,
 } from "lucide-react";
+import { AnimatedCard } from "@/components/landing/animated-card";
 import { PROGRAMS } from "@/lib/constants";
 
 const iconMap = {
@@ -35,22 +36,23 @@ export function Programs() {
         </div>
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {PROGRAMS.map((program) => {
+          {PROGRAMS.map((program, index) => {
             const Icon =
               iconMap[program.icon as keyof typeof iconMap] ?? BookOpen;
             return (
-              <div
+              <AnimatedCard
                 key={program.id}
-                className="group glass-card rounded-2xl p-6 transition hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+                index={index}
+                className="group glass-card rounded-2xl p-6 hover:border-primary/40"
               >
-                <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 text-primary transition group-hover:scale-110">
+                <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 text-primary transition duration-300 group-hover:scale-110">
                   <Icon className="size-6" />
                 </div>
                 <h3 className="text-lg font-bold">{program.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {program.description}
                 </p>
-              </div>
+              </AnimatedCard>
             );
           })}
         </div>
