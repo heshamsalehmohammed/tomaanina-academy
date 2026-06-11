@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# أكاديمية الطمأنينة
 
-## Getting Started
+منصة تعليمية عربية متكاملة لتعليم القرآن الكريم واللغة العربية أونلاين — مبنية بـ Next.js ومصممة للنشر على Vercel Hobby.
 
-First, run the development server:
+## الميزات
+
+- صفحة هبوط عربية RTL احترافية
+- نموذج تسجيل عام مع التحقق والتخزين في PostgreSQL
+- تسجيل دخول إداري آمن (Auth.js + Credentials)
+- لوحة تحكم إدارية مع إحصائيات وجدول تسجيلات
+- بحث وفلترة وترتيب وترقيم صفحات من جهة الخادم
+- تصدير CSV
+- سجل حالة وملاحظات إدارية
+
+## المتطلبات
+
+- Node.js 20+
+- PostgreSQL (محلي أو Neon / Supabase / Vercel Postgres)
+
+## التشغيل محليًا
 
 ```bash
+# 1. تثبيت الحزم
+npm install
+
+# 2. إعداد المتغيرات البيئية
+cp .env.example .env
+# عدّل DATABASE_URL و AUTH_SECRET
+
+# 3. توليد عميل Prisma وتطبيق المخطط
+npm run db:generate
+npm run db:push
+
+# 4. إنشاء مستخدم الإدارة
+npm run db:seed
+
+# 5. تشغيل التطوير
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+افتح [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## المسارات
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| المسار | الوصف | الحماية |
+|--------|--------|---------|
+| `/` | الصفحة الرئيسية | عام |
+| `/register` | نموذج التسجيل | عام |
+| `/login` | تسجيل دخول الإدارة | عام |
+| `/admin` | لوحة التحكم | محمي |
+| `/admin/registrations` | إدارة التسجيلات | محمي |
+| `/admin/registrations/[id]` | تفاصيل التسجيل | محمي |
 
-## Learn More
+## المتغيرات البيئية
 
-To learn more about Next.js, take a look at the following resources:
+| المتغير | مطلوب | الوصف |
+|---------|--------|--------|
+| `DATABASE_URL` | نعم | رابط PostgreSQL |
+| `AUTH_SECRET` | نعم | مفتاح تشفير الجلسات (32+ حرف) |
+| `ADMIN_SEED_EMAIL` | للبذر | بريد مدير النظام |
+| `ADMIN_SEED_PASSWORD` | للبذر | كلمة مرور المدير |
+| `NEXT_PUBLIC_APP_NAME` | لا | اسم التطبيق |
+| `NEXT_PUBLIC_APP_URL` | لا | رابط الموقع |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## إنشاء مستخدم الإدارة
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# عيّن في .env:
+ADMIN_SEED_EMAIL="admin@tomaanina.com"
+ADMIN_SEED_PASSWORD="كلمة-مرور-قوية"
 
-## Deploy on Vercel
+npm run db:seed
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## النشر على Vercel Hobby
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. إعداد قاعدة البيانات
+
+أنشئ قاعدة PostgreSQL عبر [Neon](https://neon.tech) أو [Supabase](https://supabase.com) أو Vercel Postgres.
+
+استخدم **رابط الاتصال المُجمّع (pooled)** في `DATABASE_URL` للإنتاج.
+
+### 2. رفع المشروع إلى Vercel
+
+```bash
+# اربط المستودع بـ Vercel أو استخدم CLI
+npx vercel
+```
+
+### 3. إعداد متغيرات البيئة في Vercel
+
+في **Project Settings → Environment Variables** أضف:
+
+- `DATABASE_URL` — رابط PostgreSQL المُجمّع
+- `AUTH_SECRET` — أنشئه: `openssl rand -base64 32`
+- `ADMIN_SEED_EMAIL`
+- `ADMIN_SEED_PASSWORD`
+- `NEXT_PUBLIC_APP_NAME` = `أكاديمية الطمأنينة`
+- `NEXT_PUBLIC_APP_URL` = رابط موقعك على Vercel
+
+### 4. تطبيق المخطط وإنشاء المدير
+
+من جهازك المحلي (بعد ضبط `DATABASE_URL` لقاعدة الإنتاج):
+
+```bash
+npm run db:push
+npm run db:seed
+```
+
+أو استخدم `prisma migrate deploy` إذا استخدمت migrations.
+
+### 5. النشر
+
+```bash
+git push
+# أو
+npx vercel --prod
+```
+
+### 6. التحقق بعد النشر
+
+1. افتح `/` — تأكد من ظهور الصفحة الرئيسية
+2. افتح `/register` — جرّب إرسال تسجيل
+3. افتح `/login` — سجّل دخول المدير
+4. افتح `/admin` — تأكد من حماية المسار
+
+### ملاحظات Vercel Hobby
+
+- لا يوجد خادم Express منفصل — كل المنطق عبر Server Actions و Route Handlers
+- الجلسات عبر JWT في cookies (متوافقة مع serverless)
+- استخدم اتصال Prisma مع تجميع الاتصالات
+- الصفحة الرئيسية ثابتة قدر الإمكان؛ صفحات الإدارة ديناميكية
+
+## الأوامر
+
+```bash
+npm run dev          # التطوير
+npm run build        # البناء للإنتاج
+npm run typecheck    # فحص الأنواع
+npm run lint         # ESLint
+npm run db:generate  # توليد Prisma Client
+npm run db:migrate   # migrations
+npm run db:push      # دفع المخطط مباشرة
+npm run db:seed      # بذر مستخدم الإدارة
+```
+
+## نماذج قاعدة البيانات
+
+- `AdminUser` — مستخدمو الإدارة
+- `ProgramRegistration` — طلبات التسجيل
+- `RegistrationNote` — ملاحظات إدارية
+- `RegistrationStatusHistory` — سجل تغيير الحالة
+
+## الترخيص
+
+خاص — أكاديمية الطمأنينة

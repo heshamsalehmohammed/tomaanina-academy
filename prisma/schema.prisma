@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StudentGender {
+  MALE
+  FEMALE
+}
+
+enum ClassType {
+  INDIVIDUAL
+  GROUP
+}
+
+enum RegistrationStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  ACCEPTED
+  REJECTED
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  notes              RegistrationNote[]
+  statusHistory      RegistrationStatusHistory[]
+}
+
+model ProgramRegistration {
+  id                   String             @id @default(cuid())
+  studentName          String
+  studentAge           Int
+  studentGender        StudentGender
+  currentLevel         String
+  hasQuranMemorization Boolean
+  memorizedAmount      String?
+  arabicReadingLevel   String
+  parentName           String
+  phone                String
+  whatsapp             String
+  email                String
+  country              String
+  city                 String
+  requestedProgram     String
+  classType            ClassType
+  weeklySessions       String
+  preferredTimes       String
+  wantsTrialLesson     Boolean            @default(false)
+  additionalNotes      String?
+  status               RegistrationStatus @default(NEW)
+  adminNotes           String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  notes         RegistrationNote[]
+  statusHistory RegistrationStatusHistory[]
+
+  @@index([status])
+  @@index([requestedProgram])
+  @@index([classType])
+  @@index([country])
+  @@index([wantsTrialLesson])
+  @@index([createdAt])
+  @@index([phone])
+  @@index([email])
+}
+
+model RegistrationNote {
+  id             String   @id @default(cuid())
+  registrationId String
+  adminId        String?
+  content        String
+  createdAt      DateTime @default(now())
+
+  registration ProgramRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  admin        AdminUser?          @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+}
+
+model RegistrationStatusHistory {
+  id             String             @id @default(cuid())
+  registrationId String
+  adminId        String?
+  fromStatus     RegistrationStatus?
+  toStatus       RegistrationStatus
+  createdAt      DateTime           @default(now())
+
+  registration ProgramRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  admin        AdminUser?          @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+}
